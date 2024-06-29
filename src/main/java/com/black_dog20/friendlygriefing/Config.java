@@ -2,25 +2,25 @@ package com.black_dog20.friendlygriefing;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = FriendlyGriefing.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
 
     public static final String CATEGORY_GENERAL = "general";
 
-    private static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+    private static final ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 
-    public static ForgeConfigSpec SERVER_CONFIG;
+    public static ModConfigSpec SERVER_CONFIG;
 
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> FRIENDLY_GRIEFING_MOBS;
+    public static ModConfigSpec.ConfigValue<List<? extends String>> FRIENDLY_GRIEFING_MOBS;
 
     static {
 
@@ -31,8 +31,7 @@ public class Config {
         SERVER_CONFIG = SERVER_BUILDER.build();
     }
 
-    public static void loadConfig(ForgeConfigSpec spec, Path path) {
-
+    public static void loadConfig(ModConfigSpec spec, Path path) {
         final CommentedFileConfig configData = CommentedFileConfig.builder(path)
                 .sync()
                 .autosave()
