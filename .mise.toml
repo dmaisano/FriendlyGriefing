@@ -1,7 +1,7 @@
-# Tool versions for FriendlyGriefing (NeoForge 1.20.4 mod)
+# Tool versions for FriendlyGriefing (NeoForge 1.21.1 mod)
 # Install: mise install
 # Activate: cd into this directory (requires `mise activate` in your shell)
 
 [tools]
-java = "temurin-17.0.19+10" # Java 17 toolchain (see common.gradle)
-gradle = "8.1.1"            # matches gradle/wrapper/gradle-wrapper.properties
+java = "temurin-21" # Java 21 toolchain (see common.gradle)
+gradle = "9.2.1"   # matches gradle/wrapper/gradle-wrapper.properties

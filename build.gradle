@@ -1,9 +1,9 @@
 plugins {
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.97'
+    id 'net.neoforged.gradle.userdev' version '7.1.38'
 }
 
-apply from: 'https://raw.githubusercontent.com/Crimix/bml/1.20.4/common.gradle'
+apply from: 'common.gradle'
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 // Default run configurations.
@@ -11,7 +11,7 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 runs {
     // applies to all the run configs below
     configureEach {
-        workingDirectory project.file('run')
+        workingDirectory project.layout.projectDirectory.dir('run').dir(name)
 
         // Recommended logging data for a userdev environment
         // The markers can be added/remove as needed separated by commas.
@@ -28,7 +28,7 @@ runs {
         systemProperty 'mixin.env.disableRefMap', 'true'
 
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty 'forge.enabledGameTestNamespaces', mod_id
+        systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
 
         modSource project.sourceSets.main
     }
@@ -37,6 +37,7 @@ runs {
     }
 
     server {
+        argument '--nogui'
     }
 
     // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -47,7 +48,7 @@ runs {
 
     data {
         // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        arguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
@@ -65,17 +66,6 @@ repositories {
     maven {
         name = "theillusivec4"
         url = "https://maven.theillusivec4.top/"
-    }
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/crimix/bml")
-        credentials {
-            username = github_user
-            password = github_token
-        }
-        content {
-            includeGroup "com.black_dog20.bml"
-        }
     }
     mavenLocal()
 }
@@ -101,25 +91,25 @@ jar {
 }
 
 curseforge {
-    apiKey = curse_apiKey
+    apiKey = findProperty('curse_apiKey') ?: ''
     project {
         id = '630841'
         changelogType = 'markdown'
         changelog = "As always find the changelog here [CHANGELOG](${changelog_url})"
         releaseType = 'release'
         addGameVersion 'NeoForge'
-        addGameVersion 'Java 17'
-        addGameVersion '1.20.4'
+        addGameVersion 'Java 21'
+        addGameVersion '1.21.1'
     }
 }
 
 modrinth {
-    token = modrinth_token
+    token = findProperty('modrinth_token') ?: ''
     projectId = "71ytzNvi"
     uploadFile = jar
     versionNumber = "${mc_version}-${version}"
     changelog = "As always find the changelog here [CHANGELOG](${changelog_url})"
     versionType = "release"
     loaders = ["neoforge"]
-    gameVersions = ["1.20.4"]
+    gameVersions = ["1.21.1"]
 }

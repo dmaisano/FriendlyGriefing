@@ -1,17 +1,14 @@
 package com.black_dog20.friendlygriefing;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = FriendlyGriefing.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = FriendlyGriefing.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class Config {
 
     public static final String CATEGORY_GENERAL = "general";
@@ -29,17 +26,6 @@ public class Config {
                 .defineList("friendlyGriefing", Arrays.asList("minecraft:villager"), String.class::isInstance);
         SERVER_BUILDER.pop();
         SERVER_CONFIG = SERVER_BUILDER.build();
-    }
-
-    public static void loadConfig(ModConfigSpec spec, Path path) {
-        final CommentedFileConfig configData = CommentedFileConfig.builder(path)
-                .sync()
-                .autosave()
-                .writingMode(WritingMode.REPLACE)
-                .build();
-
-        configData.load();
-        spec.setConfig(configData);
     }
 
     @SubscribeEvent

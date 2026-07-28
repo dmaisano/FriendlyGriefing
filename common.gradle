@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
+        classpath 'com.modrinth.minotaur:Minotaur:2.2.1'
+        classpath "net.saliman:gradle-properties-plugin:1.5.1"
+        classpath "io.github.crimix:ReplacePlaceholdersPlugin:2.0"
+    }
+}
+
+apply plugin: com.matthewprenger.cursegradle.CurseGradlePlugin
+apply plugin: com.modrinth.minotaur.Minotaur
+apply plugin: net.saliman.gradle.plugin.properties.PropertiesPlugin
+apply plugin: io.github.crimix.replaceplaceholders.ReplacePlaceholdersPlugin
+apply plugin: 'idea'
+apply plugin: 'java-library'
+
+version = version_major + '.' + version_minor + '.' + version_patch
+group = mod_group
+base {
+    archivesName = mod_archivesBaseName + "-" + mc_version
+}
+
+// Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = 'UTF-8'
+}
+
+sourceSets.main.resources {
+    srcDir 'src/main/generated/resources'
+}
+
+replaceResourcePlaceholders {
+    enabled true
+    filesToExpand "META-INF/neoforge.mods.toml", "pack.mcmeta"
+    extraProperties "version", "mod_id"
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+repositories {
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
+tasks.register('releaseMods') {
+}
+
+tasks.named('releaseMods') {
+    dependsOn(tasks.modrinth, tasks.curseforge)
+}

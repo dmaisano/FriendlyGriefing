@@ -1,6 +1,9 @@
 # Friendly Griefing Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## [1.21.1, 1.0.2] - 2026-07-28
+- Port to 1.21.1 (NeoForge)
+
 ## [1.20.4, 1.0.2] - 2024-06-29
 - Port to 1.20.4 (NeoForge)
 
